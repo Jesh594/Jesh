@@ -1,0 +1,117 @@
+local PANEL = {
+    Init = function(self)
+        self:SetSize(1000, 720)
+        self:Center()
+        self:SetVisible(true)
+
+        local x, y = self:GetSize()
+
+        surface.SetFont("DermaLarge")
+        local titleX, titlleY = surface.GetTextSize("DarkRP F4Menu")
+
+        local title = vgui.Create("DLabel", self)
+        title:SetText("DarkRP F4Menu")
+        title:SetSize(titleX, titleY)
+        title:SetPos(6, 6)
+        title:SetFont("DermaLarge")
+        title:SetTextColor(Color(255, 255, 255))
+        title:SetExspensiveShadow(2, Color(0, 0, 0, 200))
+
+        local closebutton = vgui.Create("DButton", self)
+        closebutton:SetText("Close")
+        closebutton:SetSize(75, 25)
+        closebutton:SetPos(x-81, 6)
+        closebutton.paint = function(self, w, h)
+            surface.SetDrawColor(150, 150, 150, 50)
+            surface.DrawRect(0, 0, w, h)
+            surface.SetDrawColor(50, 50, 50, 150)
+            surface.DrawOutlinedRect(0, 0, w, h)
+        end
+        closebutton.DoClick = function()
+            CSF4Menu:SetVisible(false)
+            gui.EnableScreenClicker(false)
+        end
+        
+        local removebutton = vgui.Create("DButton", self)
+        removebutton:SetText("Remove")
+        removebutton:SetSize(75, 25)
+        removebutton:SetPos(x-162, 6)
+        removebutton.paint = function(self, w, h)
+            surface.SetDrawColor(150, 150, 150, 50)
+            surface.DrawRect(0, 0, w, h)
+            surface.SetDrawColor(50, 50, 50, 150)
+            surface.DrawOutlinedRect(0, 0, w, h)
+        end
+        removebutton.DoClick = function()
+            gui.EnableScreenClicker(false)
+            CSF4Menu:Remove()
+            CSF4Menu = vgrui.Create("cs_f4_menu")
+            CSF4Menu:SetVisible(false)
+        end
+        
+        local pagesback = vgui.Create("DPanel", self)
+        pagesback:SetPos(6, 37)
+        pagesback:SetSize(x-12, y-43)
+        pagesback.Paint = function(self, w, h)
+            surface.SetDrawColor(75, 75, 75, 50)
+            surface.DrawRect(0, 0, w, h)
+        end
+
+        local pages = vgui.Create("CSDColSheet", pagesback) 
+        pages:Dock( FILL )
+
+        local jobarea = vgui.Create("DScrollPanel", pages)
+        jobarea:Dock( FILL )
+        jobarea.Paint = function(self, w, h)
+            surface.SetDrawColor(75, 75, 75, 75)
+            surface.DrawRect(0, 0, w, h)
+        end
+        pages:AddSheet("Jobs", jobarea, "icon16/user.png")
+
+        for k, v in pairs(RPExtraTeams) do 
+
+            local jobback = vgui.Create("DPanel", pages)
+            jobback:Dock( TOP )
+            jobback:SetSize(0, 200)
+            jobback:DockMargin(5, 5, 5, 5)
+            jobback.Paint = function(self, w, h)
+                surface.SetDrawColor(75, 75, 75, 50)
+                surface.DrawRect(0, 0, w, h) 
+            end
+
+            local names = vgui.Create("DLabel", jobback)
+            names:SetText(v.name)
+            names:Dock(TOP)
+            names:DockMargin(5, 5, 0, 0)
+            names:SetFont("Trebucet24")
+            names:SetTextColor(Color(255, 255, 255))
+            names:SetExspensiveShadow(2, Color(0, 0, 0, 200))
+
+        end
+        
+        local shoparea = vgui.Create("DPanel", pages)
+        shoparea:Dock( FILL )
+        shoparea.Paint = function(self, w, h)
+            surface.SetDrawColor(75, 75, 75, 75)
+            surface.DrawRect(0, 0, w, h)
+        end
+        pages:AddSheet("Shop", shoparea, "icon16/basket.png")
+ 
+
+        local commandsarea = vgui.Create("DPanel", pages)
+        commandsarea:Dock( FILL )
+        commandsarea.Paint = function(self, w, h)
+            surface.SetDrawColor(75, 75, 75, 75)
+            surface.DrawRect(0, 0, w, h)
+        end
+        pages:AddSheet("Commands", commandsarea, "icon16/application_xp_terminal.png")
+    
+    end,
+
+    Paint = function(self, w, h)
+        surface.SetDrawColor(255, 255, 255, 150)
+        surface.DrawRect(0, 0, w, h)
+        surface.DrawOutlinedRect(2, 2, w-4, h-4)
+    end
+}
+vgui.Register("vgui/cs_f4_menu.lua", PANEL)
